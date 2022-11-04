@@ -1,3 +1,4 @@
+// Package pool implements a generic worker pool.
 package pool
 
 import "sync"
@@ -32,6 +33,8 @@ func New[I, O any](w Worker[I, O]) (p Pool[I, O]) {
 	return
 }
 
+// Wait spawns a number of worker processes
+// and consumes the shared input channel.
 func (p Pool[I, O]) Wait(num int) {
 	var wg sync.WaitGroup
 
