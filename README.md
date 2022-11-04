@@ -13,7 +13,8 @@ Pool handles:
 * channels for `Work` and `Result`
 * `sync.WaitGroup` logic to run `N` goroutines
 
-Check out `example_test.go` and run it with `go test` and friends:
+## Example
+There's a demonstration `worker.go` that calculates an average, run it with `go test` and friends:
 ```
 go test -coverprofile=/tmp/c.out && go tool cover -func=/tmp/c.out
 ```
