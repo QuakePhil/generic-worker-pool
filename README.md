@@ -14,7 +14,7 @@ Pool handles:
 * `sync.WaitGroup` logic to run `N` goroutines
 
 ## Example
-There's a demonstration `statistics` worker that calculates an average, run it with `go test`
+There are a couple of demo workers, run them with `go test`:
 ```
 go test example_test.go -v
 ```
