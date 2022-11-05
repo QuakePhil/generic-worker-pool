@@ -16,5 +16,5 @@ Pool handles:
 ## Example
 There's a demonstration `statistics` worker that calculates an average, run it with `go test`
 ```
-go test example_test.go
+go test example_test.go -v
 ```

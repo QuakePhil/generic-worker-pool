@@ -4,6 +4,7 @@ import (
 	"code/worker/pool"
 	"code/worker/statistics"
 	"code/worker/statistics2"
+	"code/worker/sleeper"
 	"fmt"
 )
 
@@ -34,4 +35,16 @@ func ExampleCustomInputChannel() {
 	// counting 49
 	// counting 25
 	// 30.333333333333332
+}
+
+func ExampleOneSleeper() {
+	worker := sleeper.Worker{1000}
+	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(1)
+	// Output: done
+}
+
+func ExampleTenSleepers() {
+	worker := sleeper.Worker{1000}
+	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(10)
+	// Output: done
 }
