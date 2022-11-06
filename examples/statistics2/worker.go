@@ -3,9 +3,7 @@ package statistics2
 import "fmt"
 
 // Input gets sent from Input() to Process()
-type Input struct {
-	Number float64
-}
+type Input float64
 
 type w struct {
 	in    chan Input
@@ -34,9 +32,9 @@ func (w w) Input(in chan Input) {
 // Process() consumes Input and produces a Result.
 func (w *w) Process(i Input) {
 	w.count += 1
-	w.total += i.Number
+	w.total += float64(i)
 
-	fmt.Println("counting", i.Number)
+	fmt.Println("counting", i)
 	if w.count%3 == 0 {
 		fmt.Println("average so far:", w.total/float64(w.count))
 	}

@@ -33,9 +33,9 @@ func ExampleCustomInputChannel() {
 	in := make(chan statistics2.Input)
 	worker := statistics2.New(in)
 	go func() {
-		in <- statistics2.Input{17}
-		in <- statistics2.Input{49}
-		in <- statistics2.Input{25}
+		in <- 17
+		in <- 49
+		in <- 25
 		close(in)
 	}()
 
