@@ -20,13 +20,11 @@ func New() (w worker) {
 	return
 }
 
-var database []float64 = []float64{17, 49, 25}
-
 // Input() generates Input, e.g. reading from SQL, etc.
 func (w worker) Input(in chan Input) {
-	for i := range database {
-		in <- Input{number: database[i]}
-	}
+	in <- Input{number: 17}
+	in <- Input{number: 49}
+	in <- Input{number: 25}
 }
 
 // Process() consumes Input and produces a Result.
