@@ -1,17 +1,27 @@
 package main
 
 import (
-	"code/worker/pool"
-	"code/worker/statistics"
-	"code/worker/statistics2"
-	"code/worker/sleeper"
-	"fmt"
+	"code/generic-worker-pool/examples/sleeper"
+	"code/generic-worker-pool/examples/statistics"
+	"code/generic-worker-pool/examples/statistics2"
+	"code/generic-worker-pool/pool"
 )
+
+func ExampleSleeper() {
+	worker := sleeper.Worker{1000}
+	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(1)
+	// Output: done
+}
+
+func ExampleTenSleepers() {
+	worker := sleeper.Worker{1000}
+	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(10)
+	// Output: done
+}
 
 func Example() {
 	worker := statistics.New()
 	pool.New[statistics.Work, statistics.Result](&worker).Wait(1)
-	fmt.Println(worker.Average)
 	// Output:
 	// counting 17
 	// counting 49
@@ -29,22 +39,9 @@ func ExampleCustomInputChannel() {
 	}()
 	worker := statistics2.New(in)
 	pool.New[statistics2.Work, statistics2.Result](&worker).Wait(1)
-	fmt.Println(worker.Average)
 	// Output:
 	// counting 17
 	// counting 49
 	// counting 25
 	// 30.333333333333332
-}
-
-func ExampleOneSleeper() {
-	worker := sleeper.Worker{1000}
-	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(1)
-	// Output: done
-}
-
-func ExampleTenSleepers() {
-	worker := sleeper.Worker{1000}
-	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(10)
-	// Output: done
 }
