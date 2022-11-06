@@ -13,15 +13,15 @@ type Result struct {
 	unit Work
 }
 
-// Worker state types
-type Worker struct {
+// worker state types
+type worker struct {
 	in    chan Work
 	count int
 	total float64
 }
 
 // New worker state (could also use new() or a struct literal)
-func New(in chan Work) (w Worker) {
+func New(in chan Work) (w worker) {
 	w.in = in
 	w.count = 0
 	w.total = 0
@@ -29,7 +29,7 @@ func New(in chan Work) (w Worker) {
 }
 
 // Input() generates Work by chaining to a custom input channel.
-func (w Worker) Input(in chan Work) {
+func (w worker) Input(in chan Work) {
 	for {
 		if i, more := <-w.in; !more {
 			return
@@ -40,18 +40,18 @@ func (w Worker) Input(in chan Work) {
 }
 
 // Process() consumes Work and produces a Result.
-func (w *Worker) Process(i Work) Result {
+func (w *worker) Process(i Work) Result {
 	w.count += 1
 	w.total += i.Number
 	return Result{err: nil, unit: i}
 }
 
 // Output() consumes Results and logs, panics, etc. as appropriate.
-func (w Worker) Output(r Result) {
+func (w worker) Output(r Result) {
 	fmt.Println("counting", r.unit.Number)
 }
 
 // Done() runs after the last Process() is done.
-func (w *Worker) Done() {
+func (w *worker) Done() {
 	fmt.Println(w.total / float64(w.count))
 }
