@@ -5,13 +5,14 @@ import "fmt"
 // Input gets sent from Input() to Process()
 type Input float64
 
-type w struct {
+// worker state types
+type worker struct {
 	in    chan Input
 	count int
 	total float64
 }
 
-func New(in chan Input) (w w) {
+func New(in chan Input) (w worker) {
 	w.in = in
 	w.count = 0
 	w.total = 0
@@ -19,7 +20,7 @@ func New(in chan Input) (w w) {
 }
 
 // Input() generates Input by chaining to a custom input channel.
-func (w w) Input(in chan Input) {
+func (w worker) Input(in chan Input) {
 	for {
 		if i, more := <-w.in; !more {
 			return
@@ -30,7 +31,7 @@ func (w w) Input(in chan Input) {
 }
 
 // Process() consumes Input and produces a Result.
-func (w *w) Process(i Input) {
+func (w *worker) Process(i Input) {
 	w.count += 1
 	w.total += float64(i)
 
