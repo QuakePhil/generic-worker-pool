@@ -16,5 +16,17 @@ Pool handles:
 ## Example
 There are a couple of demo workers, run them with `go test`:
 ```
-go test example_test.go -v
+go test -v example_test.go
+```
+```
+=== RUN   ExampleSleeper
+--- PASS: ExampleSleeper (1.29s)
+=== RUN   ExampleTenSleepers
+--- PASS: ExampleTenSleepers (0.13s)
+=== RUN   Example
+--- PASS: Example (0.00s)
+=== RUN   ExampleCustomInputChannel
+--- PASS: ExampleCustomInputChannel (0.00s)
+PASS
+ok  	command-line-arguments	1.518s
 ```
