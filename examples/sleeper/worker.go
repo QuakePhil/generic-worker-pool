@@ -21,7 +21,7 @@ func (w Worker) Input(in chan Work) {
 }
 
 func (w Worker) Process(i Work) (r Result) {
-	time.Sleep(1 * time.Millisecond)
+	time.Sleep(time.Millisecond)
 	return
 }
 
