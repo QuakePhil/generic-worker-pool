@@ -10,7 +10,7 @@ Worker specifies its own:
 
 Pool handles:
 * shared channel for `Input`
-* `sync.WaitGroup` logic to run `N` goroutines
+* `sync.WaitGroup` logic to run multiple `Process(Input)` concurrently
 
 ## Example
 There are a couple of demo workers, run them with `go test`:
