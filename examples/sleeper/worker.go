@@ -22,6 +22,6 @@ func (w Worker) Process(i Input) {
 	time.Sleep(time.Millisecond)
 }
 
-func (w *Worker) Done() {
+func (w Worker) Done() {
 	fmt.Println("done")
 }

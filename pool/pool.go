@@ -19,6 +19,8 @@ type Pool[I any] struct {
 
 // New creates a generic worker pool.
 func New[I any](w Worker[I]) (p Pool[I]) {
+	// If you get "cannot use ... method has pointer receiver"
+	// then try "pool.New(worker)" instead of "pool.New(&worker)"
 	p.w = w
 
 	// input channel and method
