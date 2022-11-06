@@ -7,15 +7,13 @@ type Input struct {
 	Number float64
 }
 
-// worker state types
-type worker struct {
+type w struct {
 	in    chan Input
 	count int
 	total float64
 }
 
-// New worker state (could also use new() or a struct literal)
-func New(in chan Input) (w worker) {
+func New(in chan Input) (w w) {
 	w.in = in
 	w.count = 0
 	w.total = 0
@@ -23,7 +21,7 @@ func New(in chan Input) (w worker) {
 }
 
 // Input() generates Input by chaining to a custom input channel.
-func (w worker) Input(in chan Input) {
+func (w w) Input(in chan Input) {
 	for {
 		if i, more := <-w.in; !more {
 			return
@@ -34,7 +32,7 @@ func (w worker) Input(in chan Input) {
 }
 
 // Process() consumes Input and produces a Result.
-func (w *worker) Process(i Input) {
+func (w *w) Process(i Input) {
 	w.count += 1
 	w.total += i.Number
 
