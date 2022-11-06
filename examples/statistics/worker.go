@@ -3,9 +3,7 @@ package statistics
 import "fmt"
 
 // Input gets sent from Input() to Process()
-type Input struct {
-	number float64
-}
+type Input float64
 
 // worker state types
 type worker struct {
@@ -22,17 +20,17 @@ func New() (w worker) {
 
 // Input() generates Input, e.g. reading from SQL, etc.
 func (w worker) Input(in chan Input) {
-	in <- Input{number: 17}
-	in <- Input{number: 49}
-	in <- Input{number: 25}
+	in <- 17
+	in <- 49
+	in <- 25
 }
 
 // Process() consumes Input and produces a Result.
 func (w *worker) Process(i Input) {
 	w.count += 1
-	w.total += i.number
+	w.total += float64(i)
 
-	fmt.Println("counting", i.number)
+	fmt.Println("counting", i)
 	if w.count%3 == 0 {
 		fmt.Println("average so far:", w.total/float64(w.count))
 	}
