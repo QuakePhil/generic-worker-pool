@@ -13,7 +13,7 @@ Pool handles:
 * `sync.WaitGroup` logic to run multiple `Process(Input)` concurrently
 
 ## Example
-There are a couple of demo workers, run them with `go test`:
+Check out some demos:
 ```
 go test -v example_test.go
 ```
