@@ -49,9 +49,7 @@ func (w *worker) Process(i Work) Result {
 // Output() consumes Results and logs, panics, etc. as appropriate.
 func (w worker) Output(r Result) {
 	fmt.Println("counting", r.unit.Number)
-}
-
-// Done() runs after the last Process() is done.
-func (w *worker) Done() {
-	fmt.Println(w.total / float64(w.count))
+	if w.count%3 == 0 {
+		fmt.Println("average so far:", w.total/float64(w.count))
+	}
 }

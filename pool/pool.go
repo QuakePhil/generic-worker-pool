@@ -3,11 +3,14 @@ package pool
 
 import "sync"
 
+//import "log"
+
 type Worker[I, O any] interface {
 	Input(chan I)
 	Process(I) O
 	Output(O)
-	Done()
+	// Optional:
+	// Done()
 }
 
 type Pool[I, O any] struct {
@@ -18,13 +21,17 @@ type Pool[I, O any] struct {
 
 // New creates a generic worker pool.
 func New[I, O any](w Worker[I, O]) (p Pool[I, O]) {
-	p.in = make(chan I)
-	p.out = make(chan O)
 	p.w = w
+
+	// input channel and method
+	p.in = make(chan I)
 	go func() {
 		p.w.Input(p.in)
 		close(p.in)
 	}()
+
+	// output channel and method
+	p.out = make(chan O)
 	go func() {
 		for r := range p.out {
 			p.w.Output(r)
@@ -48,5 +55,9 @@ func (p Pool[I, O]) Wait(num int) {
 		}()
 	}
 	wg.Wait()
-	p.w.Done()
+
+	// optional Done method
+	if w, ok := p.w.(interface{ Done() }); ok {
+		w.Done()
+	}
 }

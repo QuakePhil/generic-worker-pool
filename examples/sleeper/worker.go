@@ -25,6 +25,8 @@ func (w Worker) Process(i Work) (r Result) {
 	return
 }
 
+// TODO: make the generic Output(O) optional in pool.go...
+// how to test any(p.w).(interface{Output(O)}) ?
 func (w *Worker) Output(r Result) {
 }
 

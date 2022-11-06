@@ -28,7 +28,7 @@ func Example() {
 	// counting 17
 	// counting 49
 	// counting 25
-	// 30.333333333333332
+	// average so far: 30.333333333333332
 }
 
 func ExampleCustomInputChannel() {
@@ -45,5 +45,5 @@ func ExampleCustomInputChannel() {
 	// counting 17
 	// counting 49
 	// counting 25
-	// 30.333333333333332
+	// average so far: 30.333333333333332
 }
