@@ -2,34 +2,28 @@ package statistics2
 
 import "fmt"
 
-// Work gets sent from Input() to Process()
-type Work struct {
+// Input gets sent from Input() to Process()
+type Input struct {
 	Number float64
-}
-
-// Result gets sent from Process() to Output()
-type Result struct {
-	err  error
-	unit Work
 }
 
 // worker state types
 type worker struct {
-	in    chan Work
+	in    chan Input
 	count int
 	total float64
 }
 
 // New worker state (could also use new() or a struct literal)
-func New(in chan Work) (w worker) {
+func New(in chan Input) (w worker) {
 	w.in = in
 	w.count = 0
 	w.total = 0
 	return
 }
 
-// Input() generates Work by chaining to a custom input channel.
-func (w worker) Input(in chan Work) {
+// Input() generates Input by chaining to a custom input channel.
+func (w worker) Input(in chan Input) {
 	for {
 		if i, more := <-w.in; !more {
 			return
@@ -39,16 +33,12 @@ func (w worker) Input(in chan Work) {
 	}
 }
 
-// Process() consumes Work and produces a Result.
-func (w *worker) Process(i Work) Result {
+// Process() consumes Input and produces a Result.
+func (w *worker) Process(i Input) {
 	w.count += 1
 	w.total += i.Number
-	return Result{err: nil, unit: i}
-}
 
-// Output() consumes Results and logs, panics, etc. as appropriate.
-func (w worker) Output(r Result) {
-	fmt.Println("counting", r.unit.Number)
+	fmt.Println("counting", i.Number)
 	if w.count%3 == 0 {
 		fmt.Println("average so far:", w.total/float64(w.count))
 	}

@@ -10,20 +10,20 @@ import (
 func ExampleSleeper() {
 	worker := sleeper.Worker{1000}
 	// 1 sleeper finish in about a second
-	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(1)
+	pool.New[sleeper.Input](&worker).Wait(1)
 	// Output: done
 }
 
 func ExampleTenSleepers() {
 	worker := sleeper.Worker{1000}
 	// 10 sleepers finish in about 1/10th of a second
-	pool.New[sleeper.Work, sleeper.Result](&worker).Wait(10)
+	pool.New[sleeper.Input](&worker).Wait(10)
 	// Output: done
 }
 
 func Example() {
 	worker := statistics.New()
-	pool.New[statistics.Work, statistics.Result](&worker).Wait(1)
+	pool.New[statistics.Input](&worker).Wait(1)
 	// Output:
 	// counting 17
 	// counting 49
@@ -32,15 +32,15 @@ func Example() {
 }
 
 func ExampleCustomInputChannel() {
-	in := make(chan statistics2.Work)
+	in := make(chan statistics2.Input)
 	go func() {
-		in <- statistics2.Work{17}
-		in <- statistics2.Work{49}
-		in <- statistics2.Work{25}
+		in <- statistics2.Input{17}
+		in <- statistics2.Input{49}
+		in <- statistics2.Input{25}
 		close(in)
 	}()
 	worker := statistics2.New(in)
-	pool.New[statistics2.Work, statistics2.Result](&worker).Wait(1)
+	pool.New[statistics2.Input](&worker).Wait(1)
 	// Output:
 	// counting 17
 	// counting 49

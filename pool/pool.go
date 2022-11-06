@@ -5,22 +5,20 @@ import "sync"
 
 //import "log"
 
-type Worker[I, O any] interface {
+type Worker[I any] interface {
 	Input(chan I)
-	Process(I) O
-	Output(O)
+	Process(I)
 	// Optional:
 	// Done()
 }
 
-type Pool[I, O any] struct {
-	in  chan I
-	out chan O
-	w   Worker[I, O]
+type Pool[I any] struct {
+	in chan I
+	w  Worker[I]
 }
 
 // New creates a generic worker pool.
-func New[I, O any](w Worker[I, O]) (p Pool[I, O]) {
+func New[I any](w Worker[I]) (p Pool[I]) {
 	p.w = w
 
 	// input channel and method
@@ -29,20 +27,12 @@ func New[I, O any](w Worker[I, O]) (p Pool[I, O]) {
 		p.w.Input(p.in)
 		close(p.in)
 	}()
-
-	// output channel and method
-	p.out = make(chan O)
-	go func() {
-		for r := range p.out {
-			p.w.Output(r)
-		}
-	}()
 	return
 }
 
 // Wait spawns a number of worker processes
 // and consumes the shared input channel.
-func (p Pool[I, O]) Wait(num int) {
+func (p Pool[I]) Wait(num int) {
 	var wg sync.WaitGroup
 
 	for id := 1; id <= num; id++ {
@@ -50,7 +40,7 @@ func (p Pool[I, O]) Wait(num int) {
 		go func() {
 			defer wg.Done()
 			for i := range p.in {
-				p.out <- p.w.Process(i)
+				p.w.Process(i)
 			}
 		}()
 	}
