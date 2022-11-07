@@ -40,10 +40,10 @@ func (p Pool[I]) Wait(num int) {
 	for id := 1; id <= num; id++ {
 		wg.Add(1)
 		go func() {
-			defer wg.Done()
 			for i := range p.in {
 				p.w.Process(i)
 			}
+			wg.Done()
 		}()
 	}
 	wg.Wait()
