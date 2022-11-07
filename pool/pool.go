@@ -37,8 +37,8 @@ func New[I any](w Worker[I]) (p Pool[I]) {
 func (p Pool[I]) Wait(num int) {
 	var wg sync.WaitGroup
 
+	wg.Add(num)
 	for id := 1; id <= num; id++ {
-		wg.Add(1)
 		go func() {
 			for i := range p.in {
 				p.w.Process(i)
