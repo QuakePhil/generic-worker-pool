@@ -14,7 +14,7 @@ for ... {
 * `Process(i *State) State`
 ```
 i.update = ...
-return
+return i
 ```
 * `Output(o State)`
 ```
