@@ -9,13 +9,13 @@ import (
 
 func ExampleSleeper() {
 	// 1 sleeper finish in about a second
-	pool.New[sleeper.State](sleeper.Worker{1000}).Wait(1)
+	pool.New[sleeper.State](sleeper.Worker{10}).Wait(1)
 	// Output: done
 }
 
 func ExampleTenSleepers() {
 	// 10 sleepers finish in about 1/10th of a second
-	pool.New[sleeper.State](sleeper.Worker{1000}).Wait(10)
+	pool.New[sleeper.State](sleeper.Worker{10}).Wait(10)
 	// Output: done
 }
 

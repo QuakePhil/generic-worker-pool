@@ -1,4 +1,4 @@
-// Package sleeper sleeps in millisecond increments
+// Package sleeper sleeps 100 milliseconds at a time
 package sleeper
 
 import (
@@ -19,7 +19,7 @@ func (w Worker) Input(in chan State) {
 }
 
 func (w Worker) Process(i State) State {
-	time.Sleep(time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	return i
 }
 
