@@ -3,14 +3,17 @@
 Go (1.18+) framework to run a pool of `N` workers
 
 Worker specifies its own:
-* `Input` type
-* `Input(chan Input)`
-* `Process(Input)`
+* `State` type
+  * used for input and output
+* `Input(chan State)`
+* `Process(State)`
+* `Output(State)`
 * `Done()` (optional)
 
 Pool handles:
-* shared channel for `Input`
-* `sync.WaitGroup` logic to run multiple `Process(Input)` concurrently
+* shared input/output channels for `State`
+* `sync.WaitGroup` logic to run `Process(State)` concurrently
+* a boolean channel to wait for completion of output
 
 ## Example
 Check out some demos:

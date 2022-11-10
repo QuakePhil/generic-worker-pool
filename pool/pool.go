@@ -1,49 +1,64 @@
 // Package pool implements a generic worker pool.
 package pool
 
-import "sync"
+import (
+	"sync"
+	//"time"
+)
 
-//import "log"
-
-type Worker[I any] interface {
-	Input(chan I)
-	Process(I)
+type Worker[S any] interface {
+	Input(chan S)
+	Process(S) S
+	Output(S)
 	// Optional:
 	// Done()
 }
 
-type Pool[I any] struct {
-	in chan I
-	w  Worker[I]
+type Pool[S any] struct {
+	in   chan S
+	out  chan S
+	done chan bool
+	w    Worker[S]
 }
 
 // New creates a generic worker pool.
-func New[I any](w Worker[I]) (p Pool[I]) {
+func New[S any](w Worker[S]) (p Pool[S]) {
 	// If you get "cannot use ... method has pointer receiver"
 	// then try "pool.New(&worker)" instead of "pool.New(worker)"
 	p.w = w
 
 	// input channel and method
-	p.in = make(chan I)
+	p.in = make(chan S)
 	go func() {
 		p.w.Input(p.in)
 		close(p.in)
 	}()
+
+	// output channel and method
+	p.out = make(chan S)
+	p.done = make(chan bool)
+	go func() {
+		for o := range p.out {
+			p.w.Output(o)
+		}
+		p.done <- true
+	}()
+
 	return
 }
 
 // Wait spawns a number of worker processes
 // and consumes the shared input channel.
-func (p Pool[I]) Wait(num int) {
-	var wg sync.WaitGroup
+func (p Pool[I]) Wait(concurrency int) {
 
-	wg.Add(num)
-	for id := 1; id <= num; id++ {
+	wg := &sync.WaitGroup{}
+	wg.Add(concurrency)
+	for id := 1; id <= concurrency; id++ {
 		go func() {
+			defer wg.Done()
 			for i := range p.in {
-				p.w.Process(i)
+				p.out <- p.w.Process(i)
 			}
-			wg.Done()
 		}()
 	}
 	wg.Wait()
@@ -52,4 +67,6 @@ func (p Pool[I]) Wait(num int) {
 	if w, ok := p.w.(interface{ Done() }); ok {
 		w.Done()
 	}
+	close(p.out)
+	<-p.done
 }
