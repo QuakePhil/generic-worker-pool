@@ -25,7 +25,7 @@ fmt.Println(o)
 Pool handles:
 * shared input/output channels for `State`
 * `sync.WaitGroup` logic to run `Process(State)` concurrently
-* a boolean channel to wait for completion of output
+* a `chan bool` to synchronize with completion of output
 
 ## Example
 Check out some demos:
