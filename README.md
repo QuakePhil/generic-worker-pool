@@ -5,9 +5,21 @@ Go (1.18+) framework to run a pool of `N` workers
 Worker specifies its own:
 * `State` type
   * used for input and output
-* `Input(chan State)`
-* `Process(State)`
-* `Output(State)`
+* `Input(in chan State)`
+```
+for ... {
+  in <- State{ ... }
+}
+```
+* `Process(i *State) State`
+```
+i.update = ...
+return
+```
+* `Output(o State)`
+```
+fmt.Println(o)
+```
 * `Done()` (optional)
 
 Pool handles:
