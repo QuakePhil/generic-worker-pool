@@ -34,13 +34,13 @@ go test -v example_test.go
 ```
 ```
 === RUN   ExampleSleeper
---- PASS: ExampleSleeper (1.29s)
+--- PASS: ExampleSleeper (1.02s)
 === RUN   ExampleTenSleepers
---- PASS: ExampleTenSleepers (0.13s)
+--- PASS: ExampleTenSleepers (0.10s)
 === RUN   Example
 --- PASS: Example (0.00s)
-=== RUN   ExampleCustomInputChannel
---- PASS: ExampleCustomInputChannel (0.00s)
+=== RUN   ExampleCustomStateChannel
+--- PASS: ExampleCustomStateChannel (0.00s)
 PASS
-ok  	command-line-arguments	1.518s
+ok  	command-line-arguments	1.265s
 ```
