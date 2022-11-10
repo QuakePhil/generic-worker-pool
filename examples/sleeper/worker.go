@@ -9,17 +9,17 @@ import (
 type State struct{}
 
 type Worker struct {
-	Milliseconds int // how many to sleep (1000 = 1 second)
+	Units int // how much input to generate
 }
 
 func (w Worker) Input(in chan State) {
-	for n := 1; n <= w.Milliseconds; n++ {
+	for n := 1; n <= w.Units; n++ {
 		in <- State{}
 	}
 }
 
 func (w Worker) Process(i State) State {
-	time.Sleep(100 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond) // placeholder for busywork
 	return i
 }
 
