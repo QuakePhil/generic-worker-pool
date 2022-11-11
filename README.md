@@ -11,7 +11,7 @@ for ... {
   in <- State{ ... }
 }
 ```
-* `Process(i *State) State`
+* `Process(i State) State`
 ```
 i.update = ...
 return i
