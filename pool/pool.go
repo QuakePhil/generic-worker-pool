@@ -3,13 +3,12 @@ package pool
 
 import (
 	"sync"
-	//"time"
 )
 
 type Worker[S any] interface {
 	Input(chan S)
 	Process(S) S
-	Output(S)
+	Output(chan S)
 	// Optional:
 	// Done()
 }
@@ -38,9 +37,7 @@ func New[S any](w Worker[S]) (p Pool[S]) {
 	p.out = make(chan S)
 	p.done = make(chan bool)
 	go func() {
-		for o := range p.out {
-			p.w.Output(o)
-		}
+		p.w.Output(p.out)
 		p.done <- true
 	}()
 

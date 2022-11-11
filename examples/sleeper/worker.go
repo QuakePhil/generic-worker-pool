@@ -23,7 +23,9 @@ func (w Worker) Process(i State) State {
 	return i
 }
 
-func (w Worker) Output(o State) {
+func (w Worker) Output(out chan State) {
+	for _ = range out {
+	}
 }
 
 func (w Worker) Done() {

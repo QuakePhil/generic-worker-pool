@@ -16,9 +16,11 @@ for ... {
 i.update = ...
 return i
 ```
-* `Output(o State)`
+* `Output(out chan State)`
 ```
-fmt.Println(o)
+for o := range out {
+  fmt.Println(o)
+}
 ```
 * `Done()` (optional)
 
@@ -30,7 +32,7 @@ Pool handles:
 ## Example
 Check out some demos:
 ```
-go test -v example_test.go
+go test -v -race example_test.go
 ```
 ```
 === RUN   ExampleSleeper
