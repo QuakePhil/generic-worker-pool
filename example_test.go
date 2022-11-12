@@ -1,9 +1,9 @@
 package main
 
 import (
-	"code/generic-worker-pool/examples/sleeper"
-	"code/generic-worker-pool/examples/statistics"
-	"code/generic-worker-pool/examples/statistics2"
+	"code/generic-worker-pool/examples/sleep"
+	"code/generic-worker-pool/examples/average"
+	"code/generic-worker-pool/examples/custom-input-channel"
 	"code/generic-worker-pool/pool"
 )
 
