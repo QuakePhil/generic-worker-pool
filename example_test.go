@@ -1,9 +1,8 @@
 package main
 
 import (
-	"code/generic-worker-pool/examples/sleep"
 	"code/generic-worker-pool/examples/average"
-	"code/generic-worker-pool/examples/custom-input-channel"
+	"code/generic-worker-pool/examples/sleep"
 	"code/generic-worker-pool/pool"
 )
 
@@ -20,8 +19,8 @@ func ExampleTenSleepers() {
 }
 
 func Example() {
-	worker := statistics.New()
-	pool.New[statistics.State](&worker).Wait(1)
+	worker := average.New()
+	pool.New[average.State](&worker).Wait(1)
 	// Output:
 	// average so far: 17
 	// average so far: 33
@@ -29,8 +28,8 @@ func Example() {
 }
 
 func ExampleCustomStateChannel() {
-	in := make(chan statistics2.State)
-	worker := statistics2.New(in)
+	in := make(chan average.State)
+	worker := average.NewWithChannel(in)
 	go func() {
 		in <- 17
 		in <- 49
@@ -38,7 +37,7 @@ func ExampleCustomStateChannel() {
 		close(in)
 	}()
 
-	pool.New[statistics2.State](&worker).Wait(1)
+	pool.New[average.State](&worker).Wait(1)
 	// Output:
 	// average so far: 17
 	// average so far: 33

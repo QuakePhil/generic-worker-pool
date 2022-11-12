@@ -1,4 +1,4 @@
-package statistics
+package average
 
 import "fmt"
 
@@ -6,18 +6,36 @@ import "fmt"
 type State float64
 
 // worker state types
-type worker struct{}
+type worker struct {
+	optionalInputChannel chan State
+}
 
 // New worker state (could also use new() or a struct literal)
 func New() (w worker) {
 	return
 }
 
+func NewWithChannel(in chan State) (w worker) {
+	w.optionalInputChannel = in
+	return
+}
+
 // Input() generates Input, e.g. reading from SQL, etc.
 func (w worker) Input(in chan State) {
-	in <- 17
-	in <- 49
-	in <- 25
+	if w.optionalInputChannel != nil {
+		// better way to chain channels? maybe in <- <-w.optionalInputChannel
+		for {
+			if i, more := <-w.optionalInputChannel; !more {
+				return
+			} else {
+				in <- i
+			}
+		}
+	} else {
+		in <- 17
+		in <- 49
+		in <- 25
+	}
 }
 
 // Process() consumes Input and produces a Result.
