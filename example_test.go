@@ -30,7 +30,7 @@ func ExampleManyPrimes() {
 	// Output: Found 1270607 primes
 }
 
-func ExampleCustomStateChannel() {
+func ExampleCustomInputChannel() {
 	worker := primes.NewWithChannel()
 	go func() {
 		for i := 1; i <= 20000000; i += 100000 {

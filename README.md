@@ -42,8 +42,8 @@ go test -v -race example_test.go
 --- PASS: ExamplePrimes (1.39s)
 === RUN   ExampleManyPrimes
 --- PASS: ExampleManyPrimes (0.32s)
-=== RUN   ExampleCustomStateChannel
---- PASS: ExampleCustomStateChannel (0.34s)
+=== RUN   ExampleCustomInputChannel
+--- PASS: ExampleCustomInputChannel (0.34s)
 PASS
 ok  	command-line-arguments	3.406s
 ```
