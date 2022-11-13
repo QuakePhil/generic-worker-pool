@@ -31,7 +31,7 @@ for o := range out {
 
 ## Examples
 ```
-go test -v -race example_test.go
+go test -v -race
 ```
 ```
 === RUN   ExampleSleeper
