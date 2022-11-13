@@ -19,13 +19,13 @@ func ExampleTenSleepers() {
 }
 
 func ExamplePrimes() {
-	worker := primes.New(1, 20000000, 100000)
+	worker := primes.New(20000000, 100000)
 	pool.New[primes.State](&worker).Wait(1)
 	// Output: Found 1270607 primes
 }
 
 func ExampleManyPrimes() {
-	worker := primes.New(1, 20000000, 100000)
+	worker := primes.New(20000000, 100000)
 	pool.New[primes.State](&worker).Wait(1000)
 	// Output: Found 1270607 primes
 }

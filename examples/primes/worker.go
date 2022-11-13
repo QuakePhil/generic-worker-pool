@@ -12,16 +12,14 @@ type State struct {
 
 // worker has shared state e.g. handles, connections, settings, etc
 type worker struct {
-	start int
-	end   int
-	step  int
-	In    chan State
+	max  int
+	step int
+	In   chan State
 }
 
 // New worker state (could also use new() or a struct literal)
-func New(start, end, step int) (w worker) {
-	w.start = start
-	w.end = end
+func New(max, step int) (w worker) {
+	w.max = max
 	w.step = step
 	return
 }
@@ -43,26 +41,10 @@ func (w worker) Input(in chan State) {
 			}
 		}
 	} else {
-		for i := w.start; i <= w.end; i += w.step {
+		for i := 1; i <= w.max; i += w.step {
 			in <- State{i, i + w.step, 0}
 		}
 	}
-}
-
-// https://en.wikipedia.org/wiki/Primality_test#Simple_methods
-func isPrime(n int) bool {
-	if n == 2 || n == 3 {
-		return true
-	}
-	if n <= 1 || n%2 == 0 || n%3 == 0 {
-		return false
-	}
-	for i := 5; i*i <= n; i += 6 {
-		if n%i == 0 || n%(i+2) == 0 {
-			return false
-		}
-	}
-	return true
 }
 
 // Process() works on State, counting how many primes there are in a given range
