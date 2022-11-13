@@ -27,7 +27,7 @@ for o := range out {
 ## Pool
 * [shared input/output channels](https://gobyexample.com/worker-pools) for `State`
 * [`sync.WaitGroup` logic](https://gobyexample.com/waitgroups) to run `Process(State)` concurrently
-* [a `chan bool` to synchronize](https://gobyexample.com/channel-synchronization) completion of output
+* [a `chan bool` to synchronize](https://gobyexample.com/channel-synchronization) completion of `Output()`
 
 ## Examples
 ```
