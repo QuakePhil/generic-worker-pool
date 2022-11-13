@@ -39,10 +39,12 @@ go test -v -race example_test.go
 --- PASS: ExampleSleeper (1.02s)
 === RUN   ExampleTenSleepers
 --- PASS: ExampleTenSleepers (0.10s)
-=== RUN   Example
---- PASS: Example (0.00s)
+=== RUN   ExamplePrimes
+--- PASS: ExamplePrimes (1.39s)
+=== RUN   ExampleManyPrimes
+--- PASS: ExampleManyPrimes (0.32s)
 === RUN   ExampleCustomStateChannel
---- PASS: ExampleCustomStateChannel (0.00s)
+--- PASS: ExampleCustomStateChannel (0.34s)
 PASS
-ok  	command-line-arguments	1.265s
+ok  	command-line-arguments	3.406s
 ```

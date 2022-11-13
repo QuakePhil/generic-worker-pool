@@ -1,7 +1,7 @@
 package main
 
 import (
-	"code/generic-worker-pool/examples/average"
+	"code/generic-worker-pool/examples/primes"
 	"code/generic-worker-pool/examples/sleep"
 	"code/generic-worker-pool/pool"
 )
@@ -18,28 +18,28 @@ func ExampleTenSleepers() {
 	// Output: done
 }
 
-func Example() {
-	worker := average.New()
-	pool.New[average.State](&worker).Wait(1)
-	// Output:
-	// average so far: 17
-	// average so far: 33
-	// average so far: 30.333333333333332
+func ExamplePrimes() {
+	worker := primes.New(1, 20000000, 100000)
+	pool.New[primes.State](&worker).Wait(1)
+	// Output: Found 1270607 primes
+}
+
+func ExampleManyPrimes() {
+	worker := primes.New(1, 20000000, 100000)
+	pool.New[primes.State](&worker).Wait(1000)
+	// Output: Found 1270607 primes
 }
 
 func ExampleCustomStateChannel() {
-	in := make(chan average.State)
-	worker := average.NewWithChannel(in)
+	in := make(chan primes.State)
+	worker := primes.NewWithChannel(in)
 	go func() {
-		in <- 17
-		in <- 49
-		in <- 25
+		for i := 1; i <= 20000000; i += 100000 {
+			in <- primes.State{i, i + 100000, 0}
+		}
 		close(in)
 	}()
 
-	pool.New[average.State](&worker).Wait(1)
-	// Output:
-	// average so far: 17
-	// average so far: 33
-	// average so far: 30.333333333333332
+	pool.New[primes.State](&worker).Wait(1000)
+	// Output: Found 1270607 primes
 }
