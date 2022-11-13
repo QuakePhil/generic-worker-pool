@@ -3,14 +3,14 @@ package primes
 
 import "fmt"
 
-// State gets sent from Input() to Process()
+// State gets sent from Input() to Process() to Output()
 type State struct {
 	Start  int
 	End    int
 	Primes int
 }
 
-// worker state types
+// worker has shared state e.g. handles, connections, settings, etc
 type worker struct {
 	start int
 	end   int
