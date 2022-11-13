@@ -1,9 +1,7 @@
 // Package pool implements a generic worker pool with shared input and output channels.
 package pool
 
-import (
-	"sync"
-)
+import "sync"
 
 // Worker is an interface to another package that implements a specific process.
 type Worker[S any] interface {
@@ -59,7 +57,7 @@ func (p Pool[I]) Wait(concurrency int) {
 			}
 		}()
 	}
-	wg.Wait() // wait until all Process() goroutines have finished
+	wg.Wait()    // wait until all Process() goroutines have finished
 	close(p.out) // safe to close, as only Process() writes here
 
 	// optional Done method
