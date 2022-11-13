@@ -1,4 +1,5 @@
-// Package sleeper sleeps 100 milliseconds at a time
+// Package sleeper sleeps 100 milliseconds at a time,
+// i.e. pretending to do some expensive task across the network
 package sleeper
 
 import (
