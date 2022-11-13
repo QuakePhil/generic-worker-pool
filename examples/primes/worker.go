@@ -12,10 +12,10 @@ type State struct {
 
 // worker state types
 type worker struct {
-	start                int
-	end                  int
-	step                 int
-	optionalInputChannel chan State
+	start int
+	end   int
+	step  int
+	In    chan State
 }
 
 // New worker state (could also use new() or a struct literal)
@@ -26,17 +26,17 @@ func New(start, end, step int) (w worker) {
 	return
 }
 
-func NewWithChannel(in chan State) (w worker) {
-	w.optionalInputChannel = in
+func NewWithChannel() (w worker) {
+	w.In = make(chan State)
 	return
 }
 
 // Input() generates State, e.g. reading from SQL, etc.
 func (w worker) Input(in chan State) {
-	if w.optionalInputChannel != nil {
-		// better way to chain channels? maybe in <- <-w.optionalInputChannel
+	if w.In != nil {
+		// better way to chain channels? maybe in <- <-w.In
 		for {
-			if i, more := <-w.optionalInputChannel; !more {
+			if i, more := <-w.In; !more {
 				return
 			} else {
 				in <- i

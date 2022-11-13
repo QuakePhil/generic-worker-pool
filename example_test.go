@@ -31,15 +31,13 @@ func ExampleManyPrimes() {
 }
 
 func ExampleCustomStateChannel() {
-	in := make(chan primes.State)
-	worker := primes.NewWithChannel(in)
+	worker := primes.NewWithChannel()
 	go func() {
 		for i := 1; i <= 20000000; i += 100000 {
-			in <- primes.State{i, i + 100000, 0}
+			worker.In <- primes.State{i, i + 100000, 0}
 		}
-		close(in)
+		close(worker.In)
 	}()
-
 	pool.New[primes.State](&worker).Wait(1000)
 	// Output: Found 1270607 primes
 }
