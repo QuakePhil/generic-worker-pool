@@ -2,7 +2,7 @@
 
 Go (1.18+) framework to run a pool of `N` workers
 
-Worker specifies its own:
+## Worker
 * `State` type
   * used for input and output
 * `Input(in chan State)`
@@ -24,7 +24,7 @@ for o := range out {
 ```
 * `Done()` (optional)
 
-Pool handles:
+## Pool
 * [shared input/output channels](https://gobyexample.com/worker-pools) for `State`
 * [`sync.WaitGroup` logic](https://gobyexample.com/waitgroups) to run `Process(State)` concurrently
 * [a `chan bool` to synchronize](https://gobyexample.com/channel-synchronization) completion of output
