@@ -1,4 +1,4 @@
-# Generic worker pool
+# [Generic](https://gobyexample.com/generics) worker pool
 
 Go (1.18+) framework to run a pool of `N` workers
 
@@ -25,12 +25,11 @@ for o := range out {
 * `Done()` (optional)
 
 Pool handles:
-* shared input/output channels for `State`
-* `sync.WaitGroup` logic to run `Process(State)` concurrently
-* a `chan bool` to synchronize with completion of output
+* [shared input/output channels](https://gobyexample.com/worker-pools) for `State`
+* [`sync.WaitGroup` logic](https://gobyexample.com/waitgroups) to run `Process(State)` concurrently
+* [a `chan bool` to synchronize](https://gobyexample.com/channel-synchronization) completion of output
 
-## Example
-Check out some demos:
+## Examples
 ```
 go test -v -race example_test.go
 ```
