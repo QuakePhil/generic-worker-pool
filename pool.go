@@ -51,10 +51,10 @@ func (p Pool[S]) Wait(concurrency int) {
 	wg.Add(concurrency)
 	for id := 1; id <= concurrency; id++ {
 		go func() {
-			defer wg.Done()
 			for i := range p.in {
 				p.out <- p.w.Process(i)
 			}
+			wg.Done()
 		}()
 	}
 	wg.Wait()    // wait until all Process() goroutines have finished
