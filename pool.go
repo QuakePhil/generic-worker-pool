@@ -43,8 +43,7 @@ func NewPool[S any](w Worker[S]) (p Pool[S]) {
 	return
 }
 
-// Wait spawns a number of worker processes
-// and consumes the shared input channel.
+// Wait spawns a number of worker processes and consumes the shared input channel.
 func (p Pool[S]) Wait(concurrency int) {
 
 	wg := &sync.WaitGroup{}
