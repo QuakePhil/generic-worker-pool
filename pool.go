@@ -22,7 +22,7 @@ type Pool[S any] struct {
 }
 
 // New creates the channels and kicks off the Input() and Output() methods.
-func NewPool[S any](w Worker[S]) (p Pool[S]) {
+func New[S any](w Worker[S]) (p Pool[S]) {
 	p.w = w
 
 	// input channel and method
