@@ -1,19 +1,20 @@
 package pool
 
 import (
-	"code/generic-worker-pool/examples/primes"
-	"code/generic-worker-pool/examples/sleep"
+	"github.com/quakephil/generic-worker-pool/examples/primes"
+	"github.com/quakephil/generic-worker-pool/examples/sleep"
 )
 
-// 1 sleeper finish in about a second
+// 10 units of sleep = 1 second.
+// 1 worker takes 1 second
 func ExampleSleeper() {
-	NewPool[sleeper.State](sleeper.Worker{10}).Wait(1)
+	NewPool[sleep.State](sleep.Worker{10}).Wait(1)
 	// Output: done
 }
 
-// 10 sleepers finish in about 1/10th of a second
+// 10 workers take 1/10th of a second
 func ExampleTenSleepers() {
-	NewPool[sleeper.State](sleeper.Worker{10}).Wait(10)
+	NewPool[sleep.State](sleep.Worker{10}).Wait(10)
 	// Output: done
 }
 
