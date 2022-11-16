@@ -43,17 +43,17 @@ func New[S any](w Worker[S]) (p Pool[S]) {
 
 // Wait spawns a number of worker processes and consumes the shared input channel.
 func (p Pool[S]) Wait(concurrency int) {
-	processed := make(chan bool)
-	for id := 1; id <= concurrency; id++ {
-		go func() {
-			for i := range p.in {
-				p.out <- p.w.Process(i)
-			}
-			processed <- true
-		}()
+	processed := make(chan bool, concurrency)
+	for i := range p.in {
+		processed <- true
+		go func(i S) {
+			p.out <- p.w.Process(i)
+			<-processed
+		}(i)
 	}
+
 	for wait := 1; wait <= concurrency; wait++ {
-		<-processed
+		processed <- true
 	}
 	close(p.out) // safe to close, as only Process() writes here
 

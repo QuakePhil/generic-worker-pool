@@ -2,7 +2,7 @@
 
 Go (1.18+) framework to run a pool of `N` workers
 ```
-go get github.com/quakephil/generic-worker-pool@v0.1.6
+go get github.com/quakephil/generic-worker-pool@v0.1.7
 ```
 
 ## Worker
