@@ -1,4 +1,4 @@
-# [Generic](https://gobyexample.com/generics) worker pool
+# [Generic](https://gobyexample.com/generics) worker pool [![Go Reference](https://pkg.go.dev/badge/github.com/quakephil/generic-worker-pool.svg)](https://pkg.go.dev/github.com/quakephil/generic-worker-pool)
 
 Go (1.18+) framework to run a pool of `N` workers
 ```
