@@ -1,8 +1,6 @@
 // Package pool implements a generic worker pool with shared input and output channels.
 package pool
 
-import "sync"
-
 // Worker is an interface to another package that implements a specific process.
 type Worker[S any] interface {
 	Input(chan S)
@@ -45,17 +43,18 @@ func New[S any](w Worker[S]) (p Pool[S]) {
 
 // Wait spawns a number of worker processes and consumes the shared input channel.
 func (p Pool[S]) Wait(concurrency int) {
-	wg := &sync.WaitGroup{}
-	wg.Add(concurrency)
+	processed := make(chan bool)
 	for id := 1; id <= concurrency; id++ {
 		go func() {
 			for i := range p.in {
 				p.out <- p.w.Process(i)
 			}
-			wg.Done()
+			processed <- true
 		}()
 	}
-	wg.Wait()    // wait until all Process() goroutines have finished
+	for wait := 1; wait <= concurrency; wait++ {
+		<-processed
+	}
 	close(p.out) // safe to close, as only Process() writes here
 
 	// optional Done method
