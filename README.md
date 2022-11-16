@@ -2,7 +2,7 @@
 
 Go (1.18+) framework to run a pool of `N` workers
 ```
-go get github.com/quakephil/generic-worker-pool@v0.1.1
+go get github.com/quakephil/generic-worker-pool@v0.1.3
 ```
 
 ## Worker
@@ -32,21 +32,4 @@ for o := range out {
 * [`sync.WaitGroup` logic](https://gobyexample.com/waitgroups) to run `Process(State)` concurrently
 * [a `chan bool` to synchronize](https://gobyexample.com/channel-synchronization) completion of `Output()`
 
-## Examples
-```
-go test -v -race
-```
-```
-=== RUN   ExampleSleeper
---- PASS: ExampleSleeper (1.02s)
-=== RUN   ExampleTenSleepers
---- PASS: ExampleTenSleepers (0.10s)
-=== RUN   ExamplePrimes
---- PASS: ExamplePrimes (1.39s)
-=== RUN   ExampleManyPrimes
---- PASS: ExampleManyPrimes (0.32s)
-=== RUN   ExampleCustomInputChannel
---- PASS: ExampleCustomInputChannel (0.34s)
-PASS
-ok  	command-line-arguments	3.406s
-```
+Examples: https://github.com/QuakePhil/generic-worker-pool-examples
