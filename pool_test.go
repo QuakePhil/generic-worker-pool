@@ -4,7 +4,7 @@ import "testing"
 
 // TestPool counts how many bool Input() got.
 func TestPool(t *testing.T) {
-	worker := test{make(chan int, 1)}
+	worker := test{make(chan int, 10)}
 	New[bool](worker).Wait(1)
 	finalResult := <-worker.result
 	if finalResult != 3 {
