@@ -1,6 +1,9 @@
 # [Generic](https://gobyexample.com/generics) worker pool
 
 Go (1.18+) framework to run a pool of `N` workers
+```
+go get github.com/quakephil/generic-worker-pool@v0.1.1
+```
 
 ## Worker
 * `State` type
