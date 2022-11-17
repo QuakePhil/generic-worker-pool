@@ -2,37 +2,31 @@ package pool
 
 import "testing"
 
-// TestPool counts how many bool Input() got.
+// TestPool counts how many bools input() got.
 func TestPool(t *testing.T) {
-	worker := test{make(chan int, 1)}
-	New[bool](worker).Wait(10)
-	finalResult := <-worker.result
-	if finalResult != 3 {
-		t.Fatalf("Expected 3, got %d", finalResult)
+	result := New[bool, int](test{}, input).Wait(10)
+	if result != 3 {
+		t.Fatalf("Expected 3, got %d", result)
 	}
 }
 
-type test struct {
-	result chan int
+// Input
+func input(in chan bool) {
+	in <- true
+	in <- true
+	in <- true
 }
 
-func (t test) Input(in chan bool) {
-	in <- true
-	in <- true
-	in <- true
-}
+// Worker
+type test struct{}
 
 func (t test) Process(i bool) bool {
 	return i
 }
 
-func (t test) Output(out chan bool) {
-	count := 0
-	for _ = range out {
+func (t test) Output(processed chan bool) (count int) {
+	for _ = range processed {
 		count++
 	}
-	t.result <- count
-}
-
-func (t test) Done() {
+	return
 }

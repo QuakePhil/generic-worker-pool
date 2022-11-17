@@ -2,35 +2,39 @@
 
 Go (1.18+) framework to run a pool of `N` workers
 ```
-go get github.com/quakephil/generic-worker-pool@v0.1.7
+go get github.com/quakephil/generic-worker-pool@v0.1.8
+```
+
+## Pool
+* [shared input/output channels](https://gobyexample.com/worker-pools)
+```
+workers := pool.New[I, O](Worker{ ... }, Input)
+```
+* [channel synchronization](https://gobyexample.com/channel-synchronization) for
+  * concurrent runs of `Process()`
+  * completion of `Output()`
+```
+result := workers.Wait(concurrency)
 ```
 
 ## Worker
-* `State` type
-  * used for input and output
-* `Input(in chan State)`
+  * `func Input(in chan I)`
 ```
 for ... {
-  in <- State{ ... }
+  in <- I{ ... }
 }
 ```
-* `Process(i State) State`
+  * `func (w Worker) Process(i I) I`
 ```
 i.update = ...
 return i
 ```
-* `Output(out chan State)`
+  * `func (w Worker) Output(processed chan I) (out O)`
 ```
-for o := range out {
-  fmt.Println(o)
+for o := range processed {
+  out.update += ...
 }
+return
 ```
-* `Done()` (optional)
-
-## Pool
-* [shared input/output channels](https://gobyexample.com/worker-pools) for `State`
-* [`chan bool` synchronization](https://gobyexample.com/channel-synchronization) for
-  * concurrent runs of `Process()`
-  * completion of `Output()`
 
 Examples: https://github.com/QuakePhil/generic-worker-pool-examples
