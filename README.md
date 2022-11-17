@@ -17,19 +17,21 @@ workers := pool.New[I, O](Worker{ ... }, Input)
 result := workers.Wait(concurrency)
 ```
 
-## Worker
-  * `func Input(in chan I)`
+## Input
+* `func Input(in chan I)`
 ```
 for ... {
   in <- I{ ... }
 }
 ```
-  * `func (w Worker) Process(i I) I`
+
+## Worker
+* `func (w Worker) Process(i I) I`
 ```
 i.update = ...
 return i
 ```
-  * `func (w Worker) Output(processed chan I) (out O)`
+* `func (w Worker) Output(processed chan I) (out O)`
 ```
 for o := range processed {
   out.update += ...
