@@ -12,13 +12,11 @@ type Pool[I, O any] struct {
 	in        chan I
 	processed chan I
 	out       chan O
-	w         Worker[I, O]
+	worker    Worker[I, O]
 }
 
 // New creates the channels and kicks off the input producer and the output consumer.
-func New[I, O any](w Worker[I, O], input func(chan I)) (p Pool[I, O]) {
-	p.w = w
-
+func New[I, O any](input func(chan I), worker Worker[I, O]) (p Pool[I, O]) {
 	// input channel and method
 	p.in = make(chan I)
 	go func() {
@@ -27,10 +25,11 @@ func New[I, O any](w Worker[I, O], input func(chan I)) (p Pool[I, O]) {
 	}()
 
 	// processing and output channels
+	p.worker = worker
 	p.processed = make(chan I)
 	p.out = make(chan O, 1)
 	go func() {
-		p.out <- p.w.Output(p.processed)
+		p.out <- p.worker.Output(p.processed)
 	}()
 
 	return
@@ -43,7 +42,7 @@ func (p Pool[I, O]) Wait(concurrency int) O {
 	for i := range p.in {
 		limiter <- true
 		go func(i I) {
-			p.processed <- p.w.Process(i)
+			p.processed <- p.worker.Process(i)
 			<-limiter
 		}(i)
 	}

@@ -4,7 +4,7 @@ import "testing"
 
 // TestPool counts how many bools input() got.
 func TestPool(t *testing.T) {
-	result := New[bool, int](test{}, input).Wait(10)
+	result := New[bool, int](input, test{}).Wait(10)
 	if result != 3 {
 		t.Fatalf("Expected 3, got %d", result)
 	}

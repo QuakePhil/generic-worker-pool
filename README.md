@@ -8,7 +8,7 @@ go get github.com/quakephil/generic-worker-pool@v0.1.8
 ## Pool
 * [shared input/output channels](https://gobyexample.com/worker-pools)
 ```
-workers := pool.New[I, O](Worker{ ... }, Input)
+workers := pool.New[I, O](Input, Worker{ ... })
 ```
 * [channel synchronization](https://gobyexample.com/channel-synchronization) for
   * concurrent runs of `Process()`
