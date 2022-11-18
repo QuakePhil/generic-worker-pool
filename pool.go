@@ -31,21 +31,23 @@ func New[I, O any](
 	return
 }
 
-// Wait runs input consumers concurrently and returns the result of output.
+// Wait runs workers concurrently and returns the result of output.
+// If there's no worker, input is sent directly to output.
 func (p Pool[I, O]) Wait(concurrency int) O {
-	sem := make(chan bool, concurrency)
-	for i := range p.in {
-		sem <- true
-		go func(i I) {
-			if p.worker != nil {
-				i = p.worker(i)
-			}
-			p.results <- i
-			<-sem
-		}(i)
-	}
-	for ; concurrency > 0; concurrency-- {
-		sem <- true
+	if p.worker == nil {
+		p.results <- <-p.in
+	} else {
+		sem := make(chan bool, concurrency)
+		for i := range p.in {
+			sem <- true
+			go func(i I) {
+				p.results <- p.worker(i)
+				<-sem
+			}(i)
+		}
+		for ; concurrency > 0; concurrency-- {
+			sem <- true
+		}
 	}
 	close(p.results)
 	return <-p.out // return the result of output()
