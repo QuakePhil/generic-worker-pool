@@ -1,55 +1,52 @@
 // Package pool implements a generic worker pool with shared channels.
 package pool
 
-// Worker implements input-specific processing and aggregation.
-type Worker[I, O any] interface {
-	Process(I) I
-	Output(chan I) O
-}
-
-// Pool contains channels for the generic worker.
+// Pool contains channels for the generic worker() to run at limited concurrency.
 type Pool[I, O any] struct {
-	in        chan I
-	processed chan I
-	out       chan O
-	worker    Worker[I, O]
+	in      chan I
+	results chan I
+	out     chan O
+	worker  func(I) I
 }
 
 // New creates the channels and kicks off the input producer and the output consumer.
-func New[I, O any](input func(chan I), worker Worker[I, O]) (p Pool[I, O]) {
-	// input channel and method
+func New[I, O any](
+	input func(chan<- I),
+	worker func(I) I,
+	output func(<-chan I) O,
+) (p Pool[I, O]) {
+
 	p.in = make(chan I)
 	go func() {
 		input(p.in)
 		close(p.in)
 	}()
 
-	// processing and output channels
-	p.worker = worker
-	p.processed = make(chan I)
 	p.out = make(chan O, 1)
+	p.worker = worker
+	p.results = make(chan I)
 	go func() {
-		p.out <- p.worker.Output(p.processed)
+		p.out <- output(p.results)
 	}()
-
 	return
 }
 
-// Wait kicks off the input consumers and returns the result of output,
-// using an intermediary processed channel.
+// Wait runs input consumers concurrently and returns the result of output.
 func (p Pool[I, O]) Wait(concurrency int) O {
-	limiter := make(chan bool, concurrency)
+	sem := make(chan bool, concurrency)
 	for i := range p.in {
-		limiter <- true
+		sem <- true
 		go func(i I) {
-			p.processed <- p.worker.Process(i)
-			<-limiter
+			if p.worker != nil {
+				i = p.worker(i)
+			}
+			p.results <- i
+			<-sem
 		}(i)
 	}
-
-	for wait := 1; wait <= concurrency; wait++ {
-		limiter <- true
+	for ; concurrency > 0; concurrency-- {
+		sem <- true
 	}
-	close(p.processed) // safe to close, as only Process() writes here
-	return <-p.out     // return the result of Output()
+	close(p.results)
+	return <-p.out // return the result of output()
 }

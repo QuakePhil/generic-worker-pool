@@ -4,29 +4,30 @@ import "testing"
 
 // TestPool counts how many bools input() got.
 func TestPool(t *testing.T) {
-	result := New[bool, int](input, test{}).Wait(10)
+	var result int
+
+	result = New[bool, int](input, nil, output).Wait(10)
+	if result != 0 {
+		t.Fatalf("Expected 0, got %d", result)
+	}
+
+	result = New[bool, int](input, func(_ bool) bool { return true }, output).Wait(10)
 	if result != 3 {
 		t.Fatalf("Expected 3, got %d", result)
 	}
 }
 
-// Input
-func input(in chan bool) {
-	in <- true
-	in <- true
-	in <- true
+func input(in chan<- bool) {
+	in <- false
+	in <- false
+	in <- false
 }
 
-// Worker
-type test struct{}
-
-func (t test) Process(i bool) bool {
-	return i
-}
-
-func (t test) Output(processed chan bool) (count int) {
-	for _ = range processed {
-		count++
+func output(in <-chan bool) (count int) {
+	for result := range in {
+		if result {
+			count++
+		}
 	}
 	return
 }
